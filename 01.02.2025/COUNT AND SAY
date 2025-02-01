@@ -1,0 +1,32 @@
+#define BUFF_SIZE 8192
+#define malloc_or_fail(v, n, s) if (!(v = malloc(n * s))) { perror("malloc"); exit(-1); }
+#define itoc(c) c + 0x30;
+
+char* countAndSay(int n) {
+    char *rle = NULL, rle_buff[BUFF_SIZE] = {};
+    malloc_or_fail(rle, 2, sizeof(char));
+    strcpy(rle, "1");
+    int i = 2, j = 0, k, c;
+
+    for (; i <= n; i++) {
+        j = k = 0;
+        c = 1;
+        for(;;) {
+            if (rle[j] == rle[j + 1]) {
+                j++;
+                c++;
+                continue;
+            }
+            rle_buff[k++] = itoc(c); 
+            rle_buff[k++] = rle[j];
+
+            if (!rle[++j]) break;
+            c = 1;
+        }
+        free(rle);
+        malloc_or_fail(rle, (k + 1), sizeof(char));
+        strcpy(rle, rle_buff);
+    }
+    
+    return rle;
+}
