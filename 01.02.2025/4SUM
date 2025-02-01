@@ -1,0 +1,107 @@
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+ /**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+struct DynArray {
+  int** array;
+  int size;
+  int capacity;
+} dArray;
+int compare(const void *a, const void *b) {
+    return (*(int *)a - *(int *)b);
+}
+
+// Function to check if the sum of three elements is zero
+int isSumTarget(int a, int b, int c, int d, int target) {
+    return (a + b + c +d == target);
+}
+void array_alloc(struct DynArray* dynArray){
+    // if (dynArray->capacity==0){
+    //     dynArray->array=(int**)malloc(10*sizeof(int*));
+    //     dynArray->capacity=10;
+    // }
+    if (dynArray->size==dynArray->capacity){
+        int** palceholder=(int**)realloc((void*)dynArray->array,(dynArray->capacity*2)*sizeof(int*));
+        dynArray->array=palceholder;
+        dynArray->capacity*=2;
+    }
+    dynArray->array[dynArray->size]=(int*)malloc(4*sizeof(int));
+
+}
+
+void finalize_array(struct DynArray* dynArray){
+    int** palceholder=(int**)realloc((void*)dynArray->array,dynArray->size*sizeof(int*));
+    dynArray->array=palceholder;
+}
+
+int** fourSum(int* nums, int numsSize, int target, int* returnSize, int** returnColumnSizes) {
+    qsort(nums, numsSize, sizeof(int), compare);
+    dArray.array=(int**)malloc(4*sizeof(int*));
+    dArray.size=0;
+    dArray.capacity=4;
+    for (int i=0; i<numsSize-3; i++){
+        if (i > 0 && nums[i] == nums[i - 1]) {
+            continue; // Skip duplicate elements
+        }
+        for (int j=i+1;j<numsSize-2;j++){
+            if (nums[j] == nums[j -1 ]&&j>i+1) {
+            continue; // Skip duplicate elements
+            }
+
+            int left = j + 1;
+            int right = numsSize - 1;
+
+            while (left < right) {
+                long int agg = (long int)target-nums[i]-nums[j] - nums[left] - nums[right];
+                // fprint(sum);
+                // array_alloc(&dArray);
+                // dArray.array[dArray.size][0]=sum;
+                // dArray.array[dArray.size][1]=sum;
+                // dArray.array[dArray.size][2]=sum;
+                // dArray.array[dArray.size][3]=sum;
+                // dArray.size++;
+                if (agg>0) {
+                    left++;
+                } else if (agg<0) {
+                    right--;
+                } else {
+                    // Found a triplet with sum zero
+                    array_alloc(&dArray);
+                    dArray.array[dArray.size][0]=nums[i];
+                    dArray.array[dArray.size][1]=nums[j];
+                    dArray.array[dArray.size][2]=nums[left];
+                    dArray.array[dArray.size][3]=nums[right];
+                    dArray.size++;
+
+                    // Skip duplicate elements
+                    while (left < right && nums[left] == nums[left + 1]) {
+                        left++;
+                    }
+                    while (left < right && nums[right] == nums[right - 1]) {
+                        right--;
+                    }
+
+                    left++;
+                    right--;
+                    // break;
+                }
+            }
+        }
+    }
+
+                        
+    finalize_array(&dArray);
+    *returnSize=dArray.size;
+    int* columnArray=(int*)malloc(dArray.size*sizeof(int));
+    for (int i=0;i<dArray.size;i++)columnArray[i]=4;
+    *returnColumnSizes=columnArray;
+    // for(int i=0; i<dArray.size; i++) returnColumnSizes[i]=
+    return dArray.array;
+    // return &array;
+}
