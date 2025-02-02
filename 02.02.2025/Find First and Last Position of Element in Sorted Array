@@ -1,0 +1,45 @@
+int findFirstIndex(int *nums, int target, int numsSize){
+    int start = -1;
+    
+    int l=0, h = numsSize-1, mid = 0;
+    
+    while(l<=h){
+        mid = l+(h-l)/2;
+        if(nums[mid] < target)
+            l = mid+1;
+        else
+            h = mid-1;
+        if(nums[mid]==target)
+            start = mid;
+    }
+    
+    return start;
+}
+int findLastIndex(int *nums, int target, int numsSize){
+    int end = -1;
+    
+    int l=0, h = numsSize-1, mid = 0;
+    
+    while(l<=h){
+        mid = l+(h-l)/2;
+        if(nums[mid] <= target)
+            l = mid+1;
+        else
+            h = mid-1; 
+        
+        if(nums[mid] == target)
+            end = mid;
+    }
+    
+    return end;
+}
+
+
+int* searchRange(int* nums, int numsSize, int target, int* returnSize){
+    int *res = (int *)malloc(sizeof(int) * 2);
+    *returnSize = 2;
+    
+    res[0] = findFirstIndex(nums, target, numsSize);
+    res[1] = findLastIndex(nums, target, numsSize);
+    return res;
+}
